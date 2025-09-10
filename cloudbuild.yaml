@@ -1,0 +1,26 @@
+steps:
+  # Build and push container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/subtle-lambda-466909-u2/devmarket-app', '.']
+  
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/subtle-lambda-466909-u2/devmarket-app']
+  
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'devmarket-app'
+      - '--image'
+      - 'gcr.io/subtle-lambda-466909-u2/devmarket-app'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/subtle-lambda-466909-u2/devmarket-app'
